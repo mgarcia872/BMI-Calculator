@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  BMI Calculator
 //
-//  Created by student17 on 2/10/19.
-//  Copyright © 2019 student17. All rights reserved.
+//  Created by mgarcia872 on 2/10/19.
+//  Copyright © 2019 mgarcia872. All rights reserved.
 //
 
 import UIKit
@@ -11,14 +11,21 @@ import UIKit
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 {
     // Declaring the variables and constants
-    
+    // Declaring 2 arrays for the 2 pickers
     var weightPickerData : [String] = [String]()
-    
     var heightPickerData : [String] = [String]()
     
+    // Initializing and declaring data inside pickers
     let weightUnits = ["lbs","kg"]
-    
     let heightUnits = ["in","m"]
+    
+    // Variables that store the text field user data
+    var weightSelected : String = ""
+    var heightSelected : String = ""
+    
+    // Variables that store the text field user data
+    var weightEntered : Double = 0
+    var heightEntered : Double = 0
     
     // IBOutlets
     
@@ -32,6 +39,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @IBOutlet weak var results: UILabel!
     
+    @IBOutlet weak var BMIButton: UIButton!
+    
+    @IBOutlet weak var colorChange: UIButton!
     
     override func viewDidLoad()
     {
@@ -39,17 +49,17 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         weightPickerData = ["lbs","kg"]
         heightPickerData = ["in","m"]
-        
-        results.text = "HI!!!"
+    
         
         self.heightUnit.delegate = self
         self.heightUnit.dataSource = self
         self.weightUnit.delegate = self
         self.weightUnit.dataSource = self
-        
-        super.viewDidLoad()
+                super.viewDidLoad()
+    
         // Do any additional setup after loading the view, typically from a nib.
         // Dispose of any resources that may be created
+        
     }
 
     // The number of columns of data
@@ -83,43 +93,188 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     {
         if pickerView == weightUnit
         {
-            return weightUnits[row]
+            weightSelected = weightPickerData[row]
+            return weightSelected
         }
         else
         {
-            return heightUnits[row]
+            heightSelected = heightPickerData[row]
+            return heightSelected
         }
     }
     
+    // Capture the picker view selection
+
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        
+        // This method is triggered whenever the user makes a change to the picker selection.
+        // The parameter named row and component represents what was selected.
     }
     
+    // Push BMI Button Action
     @IBAction func calculateBMI(_ sender: UIButton)
     {
-        
-        if weightUnits == ["kg"] && heightUnits == ["m"]
+        // Get weight input
+        var wInput = Double(weight.text!)!
+        var hInput = Double(height.text!)!
+
+        // If metric system
+        if weightSelected == "kg" && heightSelected == "m"
         {
-            results.text = "HI!"
-            //weight/(height)^2
-        }
-        
-        //BMIResults.text! = "Metric"
-    }
-    
-    /*@IBAction func buttonPressed(_ sender: Any)
-    {
-        
-        if weightUnits == ["lbs"] && heightUnits == ["kg"]
-        {
+            // Calculating BMI
+            let BMI = wInput/(hInput*hInput)
+            
+            // Displaying BMI in Results Label
+            results.text = String(BMI)
+            
+            // Changing background color according to BMI Index
+            if BMI < 25
+            {
+                self.colorChange.backgroundColor = .green
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Healthy", for: .normal)
+            }
+                
+            else if BMI > 25 && BMI < 30
+            {
+                self.colorChange.backgroundColor = .blue
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Overweight", for: .normal)
+            }
+                
+            else if BMI > 30 && BMI < 40
+            {
+                self.colorChange.backgroundColor = .orange
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Obese", for: .normal)
+            }
+                
+            else if BMI > 40 && BMI < 50
+            {
+                self.colorChange.backgroundColor = .red
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Extreme Obesity", for: .normal)
+            }
             
         }
-        if weightUnits == ["kg"] && heightUnits == ["m"]
+        
+        if weightSelected == "kg" && heightSelected == "in"
         {
-            //BMIResults = "Metric"
-            //weight/(height)^2
+            // Converting units and calculating BMI
+            hInput /= 39.37
+            let BMI = wInput/(hInput*hInput)
+            
+            // Displaying BMI in Results Label
+            results.text = String(BMI)
+            
+            // Changing background color according to BMI Index
+            if BMI < 25
+            {
+                self.colorChange.backgroundColor = .green
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Healthy", for: .normal)
+            }
+                
+            else if BMI > 25 && BMI < 30
+            {
+                self.colorChange.backgroundColor = .blue
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Overweight", for: .normal)
+            }
+                
+            else if BMI > 30 && BMI < 40
+            {
+                self.colorChange.backgroundColor = .orange
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Obese", for: .normal)
+            }
+                
+            else if BMI > 40 && BMI < 50
+            {
+                self.colorChange.backgroundColor = .red
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Extreme Obesity", for: .normal)
+            }
         }
-    }*/
+        
+        if weightSelected == "lbs" && heightSelected == "in"
+        {
+            // Converting units and calculating BMI
+            wInput /= 2.205
+            hInput /= 39.37
+            let BMI = wInput/(hInput*hInput)
+            
+            // Displaying BMI in Results Label
+            results.text = String(BMI)
+            
+            // Changing background color according to BMI Index
+            if BMI < 25
+            {
+                self.colorChange.backgroundColor = .green
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Healthy", for: .normal)
+            }
+                
+            else if BMI > 25 && BMI < 30
+            {
+                self.colorChange.backgroundColor = .blue
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Overweight", for: .normal)
+            }
+                
+            else if BMI > 30 && BMI < 40
+            {
+                self.colorChange.backgroundColor = .orange
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Obese", for: .normal)
+            }
+                
+            else if BMI > 40 && BMI < 50
+            {
+                self.colorChange.backgroundColor = .red
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Extreme Obesity", for: .normal)
+            }
+        }
+        
+        if weightSelected == "lbs" && heightSelected == "m"
+        {
+            // Converting units and calculating BMI
+            wInput /= 2.205
+            let BMI = wInput/(hInput*hInput)
+            
+            // Displaying BMI in Results Label
+            results.text = String(BMI)
+        
+            // Changing background color according to BMI Index
+            if BMI < 25
+            {
+                self.colorChange.backgroundColor = .green
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Healthy", for: .normal)
+            }
+                
+            else if BMI > 25 && BMI < 30
+            {
+                self.colorChange.backgroundColor = .blue
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Overweight", for: .normal)
+            }
+                
+            else if BMI > 30 && BMI < 40
+            {
+                self.colorChange.backgroundColor = .orange
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Obese", for: .normal)
+            }
+                
+            else if BMI > 40 && BMI < 50
+            {
+                self.colorChange.backgroundColor = .red
+                self.colorChange.setTitleColor(.black, for: .normal)
+                self.colorChange.setTitle("Extreme Obesity", for: .normal)
+            }
+        }
+    }
+  
 }
-
